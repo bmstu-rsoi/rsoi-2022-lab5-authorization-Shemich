@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "be850098-b8c1-4535-88c8-7365f8948018",
-		"name": "[rsoi][lab5] Flight Service",
+		"_postman_id": "dd403a17-fd76-46c7-b079-57fecf00cc0d",
+		"name": "[rsoi][lab5] Hotels Booking System",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "976707"
 	},
@@ -84,13 +84,13 @@
 					"response": []
 				},
 				{
-					"name": "[unauthorize] Получить список рейов",
+					"name": "[unauthorize] Получить список отелей",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Получить список рейсов\", () => {",
+									"pm.test(\"Получение списка отелей\", () => {",
 									"    pm.response.to.have.status(401)",
 									"})"
 								],
@@ -105,14 +105,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/flights?page=1&size=10",
+							"raw": "{{serviceUrl}}/api/v1/hotels?page=1&size=10",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"flights"
+								"hotels"
 							],
 							"query": [
 								{
@@ -129,32 +129,35 @@
 					"response": []
 				},
 				{
-					"name": "[success] Получить список рейстов",
+					"name": "[success] Получить список отелей",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Получить список рейсов\", () => {",
+									"pm.test(\"Получение списка отелей\", () => {",
 									"    pm.response.to.have.status(200)",
 									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
 									"",
-									"    const flightNumber = pm.collectionVariables.get(\"flightNumber\")",
-									"    const response = pm.response.json();",
-									"",
 									"    const pageSize = Number(pm.request.url.query.get(\"size\"))",
+									"    const hotelUid = pm.collectionVariables.get(\"hotelUid\")",
+									"    ",
+									"    const response = pm.response.json();    ",
 									"    pm.expect(response.items).to.be.an(\"array\")",
 									"    pm.expect(response.page).to.be.not.undefined",
 									"    pm.expect(response.pageSize).to.be.lte(pageSize)",
 									"    pm.expect(response.totalElements).to.be.not.undefined",
 									"",
-									"    const flight = _.find(response.items, { \"flightNumber\": flightNumber })",
-									"    pm.expect(flight).to.be.not.undefined",
-									"    pm.expect(flight.flightNumber).to.eq(flightNumber)",
-									"    pm.expect(flight.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
-									"    pm.expect(flight.toAirport).to.eq(\"Москва Шереметьево\")",
-									"    pm.expect(flight.date).to.not.empty",
-									"    pm.expect(flight.price).to.eq(1500)",
+									"    const hotel = _.find(response.items, { \"hotelUid\": hotelUid })",
+									"    pm.expect(hotel).to.be.not.undefined",
+									"    pm.expect(hotel.hotelUid).to.eq(hotelUid)",
+									"    pm.expect(hotel.name).to.eq(\"Ararat Park Hyatt Moscow\")",
+									"    pm.expect(hotel.country).to.eq(\"Россия\")",
+									"    pm.expect(hotel.city).to.eq(\"Москва\")",
+									"    pm.expect(hotel.address).to.eq(\"Неглинная ул., 4\")",
+									"    pm.expect(hotel.stars).to.be.eq(5)",
+									"    pm.expect(hotel.price).to.be.eq(10000)",
+									"    pm.collectionVariables.set(\"hotelPrice\", hotel.price)",
 									"})"
 								],
 								"type": "text/javascript"
@@ -175,14 +178,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/flights?page=1&size=10",
+							"raw": "{{serviceUrl}}/api/v1/hotels?page=1&size=10",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"flights"
+								"hotels"
 							],
 							"query": [
 								{
@@ -199,13 +202,13 @@
 					"response": []
 				},
 				{
-					"name": "[unauthorize] Получить информацию о состоянии бонусного счета",
+					"name": "[unauthorize] Получить информацию о статусе в программе лояльности",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Получить информацию о состоянии бонусного счета\", () => {",
+									"pm.test(\"Получение информации о статусе в программе лояльности\", () => {",
 									"    pm.response.to.have.status(401)",
 									"})"
 								],
@@ -220,35 +223,36 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/privilege",
+							"raw": "{{serviceUrl}}/api/v1/loyalty",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"privilege"
+								"loyalty"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[success] Получить информацию о состоянии бонусного счета",
+					"name": "[success] Получить информацию о статусе в программе лояльности",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Получить информацию о состоянии бонусного счета\", () => {",
+									"pm.test(\"Получение информации о статусе в программе лояльности\", () => {",
 									"    pm.response.to.have.status(200)",
 									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
 									"",
 									"    const response = pm.response.json();",
-									"",
-									"    pm.expect(response.balance).to.be.not.undefined",
-									"    pm.expect(response.status).to.be.not.undefined",
-									"    pm.collectionVariables.set(\"balance\", response.balance)",
+									"    pm.expect(response.status).to.not.empty",
+									"    pm.expect(response.discount).to.be.not.undefined",
+									"    pm.collectionVariables.set(\"discount\", response.discount)",
+									"    pm.expect(response.reservationCount).to.be.not.undefined",
+									"    pm.collectionVariables.set(\"reservationCount\", response.reservationCount)",
 									"})"
 								],
 								"type": "text/javascript"
@@ -269,27 +273,27 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/privilege",
+							"raw": "{{serviceUrl}}/api/v1/loyalty",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"privilege"
+								"loyalty"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[unauthorize] Покупка билета",
+					"name": "[unauthorize] Забронировать отель",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Купить билет\", () => {",
+									"pm.test(\"Забронировать отель\", () => {",
 									"    pm.response.to.have.status(401)",
 									"})"
 								],
@@ -305,56 +309,62 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"flightNumber\": \"{{flightNumber}}\",\n    \"price\": 1500,\n    \"paidFromBalance\": false\n}"
+							"raw": "{\n    \"hotelUid\": \"{{hotelUid}}\",\n    \"startDate\": \"2021-10-08\",\n    \"endDate\": \"2021-10-11\"\n}"
 						},
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/tickets",
+							"raw": "{{serviceUrl}}/api/v1/reservations",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"tickets"
+								"reservations"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[success] Покупка билета",
+					"name": "[success] Забронировать отель",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Купить билет\", () => {",
+									"const moment = require(\"moment\")",
+									"",
+									"pm.test(\"Забронировать отель\", () => {",
 									"    pm.response.to.have.status(200)",
 									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
 									"",
-									"    const flightNumber = pm.collectionVariables.get(\"flightNumber\")",
-									"    const response = pm.response.json();",
+									"    const hotelUid = pm.collectionVariables.get(\"hotelUid\")",
+									"    const hotelPrice = pm.collectionVariables.get(\"hotelPrice\")",
+									"    const discount = pm.collectionVariables.get(\"discount\")",
 									"",
-									"    pm.expect(response).to.be.not.undefined",
-									"    pm.expect(response.ticketUid).to.be.not.empty",
-									"    pm.expect(response.flightNumber).to.eq(flightNumber)",
-									"    pm.expect(response.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
-									"    pm.expect(response.toAirport).to.eq(\"Москва Шереметьево\")",
-									"    pm.expect(response.date).to.not.empty",
-									"    pm.expect(response.price).to.eq(1500)",
-									"    pm.expect(response.paidByMoney).to.eq(1500)",
-									"    pm.expect(response.paidByBonuses).to.eq(0)",
-									"    pm.expect(response.status).to.eq(\"PAID\")",
-									"    pm.expect(response.privilege.balance).to.gte(150)",
-									"    pm.expect(response.privilege.status).to.be.not.empty",
-									"    ",
-									"    pm.collectionVariables.set(\"ticketUid\", response.ticketUid)",
+									"    const response = pm.response.json();",
+									"    const request = JSON.parse(pm.request.body.raw)",
+									"",
+									"    pm.expect(response.reservationUid).to.be.not.undefined",
+									"    pm.expect(response.hotelUid).to.be.eq(hotelUid)",
+									"    pm.expect(response.startDate).to.be.eq(request.startDate)",
+									"    pm.expect(response.endDate).to.be.eq(request.endDate)",
+									"    pm.expect(response.discount).to.be.eq(discount)",
+									"    pm.expect(response.status).to.be.eq(\"PAID\")",
+									"    pm.expect(response.payment).to.be.not.undefined",
+									"    pm.expect(response.payment.status).to.be.eq(\"PAID\")",
+									"    const days = Math.abs(moment(request.startDate).diff(moment(request.endDate), \"days\"))",
+									"    const price = hotelPrice * days",
+									"    pm.expect(response.payment.price).to.be.eq(price - (price * discount / 100.0))",
+									"",
+									"    pm.collectionVariables.set(\"startDate\", request.startDate)",
+									"    pm.collectionVariables.set(\"endDate\", request.endDate)",
+									"    pm.collectionVariables.set(\"reservationUid\", response.reservationUid)",
 									"})"
 								],
 								"type": "text/javascript"
@@ -381,30 +391,30 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"flightNumber\": \"{{flightNumber}}\",\n    \"price\": 1500,\n    \"paidFromBalance\": false\n}"
+							"raw": "{\n    \"hotelUid\": \"{{hotelUid}}\",\n    \"startDate\": \"2021-10-08\",\n    \"endDate\": \"2021-10-11\"\n}"
 						},
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/tickets",
+							"raw": "{{serviceUrl}}/api/v1/reservations",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"tickets"
+								"reservations"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[unauthorize] Информация по конкретному билету",
+					"name": "[unauthorize] Информация по конкретному бронированию",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Информация по конкретному билету\", () => {",
+									"pm.test(\"Получение информации о конкретном бронировании\", () => {",
 									"    pm.response.to.have.status(401)",
 									"})"
 								],
@@ -419,21 +429,21 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/tickets/:ticketUid",
+							"raw": "{{serviceUrl}}/api/v1/reservations/:reservationUid",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"tickets",
-								":ticketUid"
+								"reservations",
+								":reservationUid"
 							],
 							"variable": [
 								{
-									"key": "ticketUid",
-									"value": "{{ticketUid}}",
-									"description": "UUID билета"
+									"key": "reservationUid",
+									"value": "{{reservationUid}}",
+									"description": "UUID бронирования"
 								}
 							]
 						}
@@ -441,28 +451,41 @@
 					"response": []
 				},
 				{
-					"name": "[success] Информация по конкретному билету",
+					"name": "[success] Информация по конкретному бронированию",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Информация по конкретному билету\", () => {",
+									"const moment = require(\"moment\")",
+									"",
+									"pm.test(\"Получение информации о конкретном бронировании\", () => {",
 									"    pm.response.to.have.status(200)",
 									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
 									"",
-									"    const flightNumber = pm.collectionVariables.get(\"flightNumber\")",
-									"    const ticketUid = pm.collectionVariables.get(\"ticketUid\")",
-									"    ",
+									"    const hotelUid = pm.collectionVariables.get(\"hotelUid\")",
+									"    const reservationUid = pm.collectionVariables.get(\"reservationUid\")",
+									"    const hotelPrice = pm.collectionVariables.get(\"hotelPrice\")",
+									"    const startDate = pm.collectionVariables.get(\"startDate\")",
+									"    const endDate = pm.collectionVariables.get(\"endDate\")",
+									"    const discount = pm.collectionVariables.get(\"discount\")",
+									"",
 									"    const response = pm.response.json();",
-									"    pm.expect(response).to.be.not.undefined",
-									"    pm.expect(response.ticketUid).to.be.eq(ticketUid)",
-									"    pm.expect(response.flightNumber).to.eq(flightNumber)",
-									"    pm.expect(response.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
-									"    pm.expect(response.toAirport).to.eq(\"Москва Шереметьево\")",
-									"    pm.expect(response.date).to.not.empty",
-									"    pm.expect(response.price).to.eq(1500)",
-									"    pm.expect(response.status).to.eq(\"PAID\")",
+									"    pm.expect(response.reservationUid).to.be.eq(reservationUid)",
+									"    pm.expect(response.hotel).to.be.not.undefined",
+									"    pm.expect(response.hotel.hotelUid).to.be.eq(hotelUid)",
+									"    pm.expect(response.hotel.name).to.be.eq(\"Ararat Park Hyatt Moscow\")",
+									"    pm.expect(response.hotel.fullAddress).to.be.eq(\"Россия, Москва, Неглинная ул., 4\")",
+									"    pm.expect(response.hotel.stars).to.be.eq(5)",
+									"    pm.expect(response.startDate).to.be.eq(startDate)",
+									"    pm.expect(response.endDate).to.be.eq(endDate)",
+									"    pm.expect(response.status).to.be.eq(\"PAID\")",
+									"    pm.expect(response.payment).to.be.not.undefined",
+									"    pm.expect(response.payment.status).to.be.eq(\"PAID\")",
+									"    ",
+									"    const days = Math.abs(moment(startDate).diff(moment(endDate), \"days\"))",
+									"    const price = hotelPrice * days",
+									"    pm.expect(response.payment.price).to.be.eq(price - (price * discount / 100.0))",
 									"})"
 								],
 								"type": "text/javascript"
@@ -483,21 +506,21 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/tickets/:ticketUid",
+							"raw": "{{serviceUrl}}/api/v1/reservations/:reservationUid",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"tickets",
-								":ticketUid"
+								"reservations",
+								":reservationUid"
 							],
 							"variable": [
 								{
-									"key": "ticketUid",
-									"value": "{{ticketUid}}",
-									"description": "UUID билета"
+									"key": "reservationUid",
+									"value": "{{reservationUid}}",
+									"description": "UUID бронирования"
 								}
 							]
 						}
@@ -505,13 +528,13 @@
 					"response": []
 				},
 				{
-					"name": "[unauthorize] Информация по всем билетам пользователя",
+					"name": "[unauthorize] Информация по всем бронированиям пользователя",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Информация по всем билетам\", () => {",
+									"pm.test(\"Получение информации по всем бронированиям\", () => {",
 									"    pm.response.to.have.status(401)",
 									"})"
 								],
@@ -526,45 +549,57 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/tickets",
+							"raw": "{{serviceUrl}}/api/v1/reservations",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"tickets"
+								"reservations"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[success] Информация по всем билетам пользователя",
+					"name": "[success] Информация по всем бронированиям пользователя",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Информация по всем билетам\", () => {",
+									"const moment = require(\"moment\")",
+									"",
+									"pm.test(\"Получение информации по всем бронированиям\", () => {",
 									"    pm.response.to.have.status(200)",
 									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
 									"",
-									"    const flightNumber = pm.collectionVariables.get(\"flightNumber\")",
-									"    const ticketUid = pm.collectionVariables.get(\"ticketUid\")",
-									"    ",
+									"    const hotelUid = pm.collectionVariables.get(\"hotelUid\")",
+									"    const reservationUid = pm.collectionVariables.get(\"reservationUid\")",
+									"    const hotelPrice = pm.collectionVariables.get(\"hotelPrice\")",
+									"    const startDate = pm.collectionVariables.get(\"startDate\")",
+									"    const endDate = pm.collectionVariables.get(\"endDate\")",
+									"    const discount = pm.collectionVariables.get(\"discount\")",
+									"",
 									"    const response = pm.response.json();",
 									"    pm.expect(response).to.be.an(\"array\")",
-									"",
-									"    const ticket = _.find(response, { \"ticketUid\": ticketUid })",
-									"    pm.expect(ticket).to.be.not.undefined",
-									"    pm.expect(ticket.ticketUid).to.be.eq(ticketUid)",
-									"    pm.expect(ticket.flightNumber).to.eq(flightNumber)",
-									"    pm.expect(ticket.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
-									"    pm.expect(ticket.toAirport).to.eq(\"Москва Шереметьево\")",
-									"    pm.expect(ticket.date).to.not.empty",
-									"    pm.expect(ticket.price).to.eq(1500)",
-									"    pm.expect(ticket.status).to.eq(\"PAID\")",
+									"    const reservation = _.find(response, { \"reservationUid\": reservationUid })",
+									"    ",
+									"    pm.expect(reservation.reservationUid).to.be.eq(reservationUid)",
+									"    pm.expect(reservation.hotel).to.be.not.undefined",
+									"    pm.expect(reservation.hotel.hotelUid).to.be.eq(hotelUid)",
+									"    pm.expect(reservation.hotel.name).to.be.eq(\"Ararat Park Hyatt Moscow\")",
+									"    pm.expect(reservation.hotel.fullAddress).to.be.eq(\"Россия, Москва, Неглинная ул., 4\")",
+									"    pm.expect(reservation.hotel.stars).to.be.eq(5)",
+									"    pm.expect(reservation.startDate).to.be.eq(startDate)",
+									"    pm.expect(reservation.endDate).to.be.eq(endDate)",
+									"    pm.expect(reservation.status).to.be.eq(\"PAID\")",
+									"    pm.expect(reservation.payment).to.be.not.undefined",
+									"    pm.expect(reservation.payment.status).to.be.eq(\"PAID\")",
+									"    const days = Math.abs(moment(startDate).diff(moment(endDate), \"days\"))",
+									"    const price = hotelPrice * days",
+									"    pm.expect(reservation.payment.price).to.be.eq(price - (price * discount / 100.0))",
 									"})"
 								],
 								"type": "text/javascript"
@@ -585,14 +620,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/tickets",
+							"raw": "{{serviceUrl}}/api/v1/reservations",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"tickets"
+								"reservations"
 							]
 						}
 					},
@@ -605,7 +640,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Информация о пользователе\", () => {",
+									"pm.test(\"Получение информации о пользователе\", () => {",
 									"    pm.response.to.have.status(401)",
 									"})"
 								],
@@ -640,29 +675,42 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Информация о пользователе\", () => {",
+									"const moment = require(\"moment\")",
+									"",
+									"pm.test(\"Получение информации о пользователе\", () => {",
 									"    pm.response.to.have.status(200)",
 									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
 									"",
-									"    const flightNumber = pm.collectionVariables.get(\"flightNumber\")",
-									"    const ticketUid = pm.collectionVariables.get(\"ticketUid\")",
-									"    const balance = pm.collectionVariables.get(\"balance\")",
+									"    const hotelUid = pm.collectionVariables.get(\"hotelUid\")",
+									"    const reservationUid = pm.collectionVariables.get(\"reservationUid\")",
+									"    const hotelPrice = pm.collectionVariables.get(\"hotelPrice\")",
+									"    const startDate = pm.collectionVariables.get(\"startDate\")",
+									"    const endDate = pm.collectionVariables.get(\"endDate\")",
+									"    const discount = pm.collectionVariables.get(\"discount\")",
 									"",
 									"    const response = pm.response.json();",
-									"    const ticket = _.find(response.tickets, { \"ticketUid\": ticketUid })",
-									"",
-									"    pm.expect(ticket).to.be.not.undefined",
-									"    pm.expect(ticket.ticketUid).to.be.eq(ticketUid)",
-									"    pm.expect(ticket.flightNumber).to.be.eq(flightNumber)",
-									"    pm.expect(ticket.fromAirport).to.eq(\"Санкт-Петербург Пулково\")",
-									"    pm.expect(ticket.toAirport).to.eq(\"Москва Шереметьево\")",
-									"    pm.expect(ticket.date).to.not.empty",
-									"    pm.expect(ticket.price).to.be.eq(1500)",
-									"    pm.expect(ticket.status).to.be.eq(\"PAID\")",
+									"    pm.expect(response.reservations).to.be.not.undefined",
+									"    pm.expect(response.reservations).to.be.an(\"array\")",
+									"    const reservation = _.find(response.reservations, { \"reservationUid\": reservationUid })",
 									"    ",
-									"    pm.expect(response.privilege).to.be.not.undefined",
-									"    pm.expect(response.privilege.balance).to.be.eq(balance + 150)",
-									"    pm.expect(response.privilege.status).to.be.not.empty",
+									"    pm.expect(reservation.reservationUid).to.be.eq(reservationUid)",
+									"    pm.expect(reservation.hotel).to.be.not.undefined",
+									"    pm.expect(reservation.hotel.hotelUid).to.be.eq(hotelUid)",
+									"    pm.expect(reservation.hotel.name).to.be.eq(\"Ararat Park Hyatt Moscow\")",
+									"    pm.expect(reservation.hotel.fullAddress).to.be.eq(\"Россия, Москва, Неглинная ул., 4\")",
+									"    pm.expect(reservation.hotel.stars).to.be.eq(5)",
+									"    pm.expect(reservation.startDate).to.be.eq(startDate)",
+									"    pm.expect(reservation.endDate).to.be.eq(endDate)",
+									"    pm.expect(reservation.status).to.be.eq(\"PAID\")",
+									"    pm.expect(reservation.payment).to.be.not.undefined",
+									"    pm.expect(reservation.payment.status).to.be.eq(\"PAID\")",
+									"    const days = Math.abs(moment(startDate).diff(moment(endDate), \"days\"))",
+									"    const price = hotelPrice * days",
+									"    pm.expect(reservation.payment.price).to.be.eq(price - (price * discount / 100.0))",
+									"",
+									"    pm.expect(response.loyalty).to.be.not.undefined",
+									"    pm.expect(response.loyalty.status).to.not.empty",
+									"    pm.expect(response.loyalty.discount).to.be.eq(discount)",
 									"})"
 								],
 								"type": "text/javascript"
@@ -697,25 +745,22 @@
 					"response": []
 				},
 				{
-					"name": "[success] Получить информацию о состоянии бонусного счета после покупки билета",
+					"name": "[success] Получить информацию о статусе в программе лояльности после бронирования",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Информация о состоянии бонусного счета\", () => {",
+									"pm.test(\"Получение информации о статусе в программе лояльности\", () => {",
 									"    pm.response.to.have.status(200)",
 									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.contains(\"application/json\");",
 									"",
-									"    const ticketUid = pm.collectionVariables.get(\"ticketUid\")",
-									"    const balance = pm.collectionVariables.get(\"balance\")",
+									"    const reservationCount = pm.collectionVariables.get(\"reservationCount\")",
 									"",
 									"    const response = pm.response.json();",
-									"    const ticket = _.find(response.history, { \"ticketUid\": ticketUid })",
-									"    pm.expect(ticket).to.be.not.undefined",
-									"",
-									"    pm.expect(response.balance).to.be.eq(balance + 150)",
-									"    pm.expect(response.status).to.be.not.undefined",
+									"    pm.expect(response.status).to.not.empty",
+									"    pm.expect(response.discount).to.be.not.undefined",
+									"    pm.expect(response.reservationCount).to.be.eq(reservationCount + 1)",
 									"})"
 								],
 								"type": "text/javascript"
@@ -736,27 +781,27 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/privilege",
+							"raw": "{{serviceUrl}}/api/v1/loyalty",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"privilege"
+								"loyalty"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[unauthorize] Возврат билета",
+					"name": "[unauthorize] Отменить бронирование",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Билет успешно возвращен\", () => {",
+									"pm.test(\"Отменить бронирование\", () => {",
 									"    pm.response.to.have.status(401)",
 									"})"
 								],
@@ -771,21 +816,21 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/tickets/:ticketUid",
+							"raw": "{{serviceUrl}}/api/v1/reservations/:reservationUid",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"tickets",
-								":ticketUid"
+								"reservations",
+								":reservationUid"
 							],
 							"variable": [
 								{
-									"key": "ticketUid",
-									"value": "{{ticketUid}}",
-									"description": "UUID билета"
+									"key": "reservationUid",
+									"value": "{{reservationUid}}",
+									"description": "UUID бронирования"
 								}
 							]
 						}
@@ -793,13 +838,13 @@
 					"response": []
 				},
 				{
-					"name": "[success] Возврат билета",
+					"name": "[success] Отменить бронирование",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Билет успешно возвращен\", () => {",
+									"pm.test(\"Отменить бронирование\", () => {",
 									"    pm.response.to.have.status(204)",
 									"})"
 								],
@@ -821,21 +866,21 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{serviceUrl}}/api/v1/tickets/:ticketUid",
+							"raw": "{{serviceUrl}}/api/v1/reservations/:reservationUid",
 							"host": [
 								"{{serviceUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"tickets",
-								":ticketUid"
+								"reservations",
+								":reservationUid"
 							],
 							"variable": [
 								{
-									"key": "ticketUid",
-									"value": "{{ticketUid}}",
-									"description": "UUID билета"
+									"key": "reservationUid",
+									"value": "{{reservationUid}}",
+									"description": "UUID бронирования"
 								}
 							]
 						}
@@ -852,7 +897,7 @@
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							"pm.collectionVariables.set(\"flightNumber\", \"AFL031\")"
+							"pm.collectionVariables.set(\"hotelUid\", \"049161bb-badd-4fa8-9d90-87c9a82b0668\")"
 						]
 					}
 				},
@@ -874,15 +919,31 @@
 			"value": "http://localhost:8080"
 		},
 		{
-			"key": "flightNumber",
+			"key": "hotelUid",
 			"value": ""
 		},
 		{
-			"key": "ticketUid",
+			"key": "reservationCount",
 			"value": ""
 		},
 		{
-			"key": "balance",
+			"key": "discount",
+			"value": ""
+		},
+		{
+			"key": "hotelPrice",
+			"value": ""
+		},
+		{
+			"key": "reservationUid",
+			"value": ""
+		},
+		{
+			"key": "startDate",
+			"value": ""
+		},
+		{
+			"key": "endDate",
 			"value": ""
 		},
 		{
