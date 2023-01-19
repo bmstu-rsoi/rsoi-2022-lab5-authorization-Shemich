@@ -76,7 +76,7 @@
 								"{{identityProviderUrl}}"
 							],
 							"path": [
-								"oauth",
+								"v1",
 								"token"
 							]
 						}
