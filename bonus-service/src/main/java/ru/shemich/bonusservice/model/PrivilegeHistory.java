@@ -1,14 +1,11 @@
 package ru.shemich.bonusservice.model;
 
-import lombok.*;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.shemich.bonusservice.api.response.enums.OperationType;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 import static javax.persistence.GenerationType.IDENTITY;

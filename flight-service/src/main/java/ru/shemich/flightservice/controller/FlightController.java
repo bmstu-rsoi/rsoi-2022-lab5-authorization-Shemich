@@ -2,7 +2,10 @@ package ru.shemich.flightservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.shemich.flightservice.api.response.FlightResponse;
 import ru.shemich.flightservice.api.response.PaginationResponse;
 import ru.shemich.flightservice.model.Flight;

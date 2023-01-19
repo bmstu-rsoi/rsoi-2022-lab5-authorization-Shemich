@@ -11,7 +11,6 @@ import ru.shemich.gatewayservice.model.*;
 import ru.shemich.gatewayservice.service.GatewayService;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

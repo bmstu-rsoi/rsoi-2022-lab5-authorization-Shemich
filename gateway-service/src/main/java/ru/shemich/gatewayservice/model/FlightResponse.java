@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Date;
-
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor

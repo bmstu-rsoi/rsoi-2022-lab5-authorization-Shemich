@@ -11,7 +11,6 @@ import ru.shemich.flightservice.repository.AirportRepository;
 import ru.shemich.flightservice.repository.FlightRepository;
 import ru.shemich.flightservice.service.FlightService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

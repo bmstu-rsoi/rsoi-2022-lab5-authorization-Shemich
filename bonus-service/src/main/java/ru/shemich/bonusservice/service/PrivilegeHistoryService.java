@@ -5,7 +5,6 @@ import ru.shemich.bonusservice.model.Privilege;
 import ru.shemich.bonusservice.model.PrivilegeHistory;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface PrivilegeHistoryService {
 
