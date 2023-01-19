@@ -4,32 +4,32 @@
 	"values": [
 		{
 			"key": "serviceUrl",
-			"value": "",
+			"value": "https://gateway-shemich.cloud.okteto.net",
 			"enabled": true
 		},
 		{
 			"key": "identityProviderUrl",
-			"value": "",
+			"value": "https://dev-37357578.okta.com/oauth2/default",
 			"enabled": true
 		},
 		{
 			"key": "username",
-			"value": "",
+			"value": "testmax@gmail.com",
 			"enabled": true
 		},
 		{
 			"key": "password",
-			"value": "",
+			"value": "qwerty12345$",
 			"enabled": true
 		},
 		{
 			"key": "clientId",
-			"value": "",
+			"value": "0oa80s3emo1vvjKgO5d7",
 			"enabled": true
 		},
 		{
 			"key": "clientSecret",
-			"value": "",
+			"value": "a2DAPzTiDHVAJyxGvvq6VVak0RKPZ8sFP9Smpmzd",
 			"enabled": true
 		}
 	],
