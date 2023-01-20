@@ -78,6 +78,12 @@ jobs:
           sleep 45
           kubectl get pods
 
+      - name: Create .kube folder
+        run: mkdir $HOME/.kube
+
+      - name: Send oktetog config to K8S
+        run: cp ./k8s/config $HOME/.kube/config
+
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
