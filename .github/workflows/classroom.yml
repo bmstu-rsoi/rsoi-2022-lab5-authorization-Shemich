@@ -70,8 +70,8 @@ jobs:
       - name: Create .kube folder
         run: mkdir $HOME/.kube
 
-      - name: Send oktetog config to K8S
-        run: cp ./k8s/config $HOME/.kube/configg
+      - name: Send okteto config to K8Sg
+        run: cp ./k8s/config $HOME/.kube/config
 
       - name: Deploy to k8s
         run: |
