@@ -1,0 +1,21 @@
+apiVersion: v2
+name: services-chart
+description: A Helm chart for Kubernetes
+type: application
+version: 1.0.0
+dependencies:
+  - name: service-chart
+    version: 1.0.0
+    alias: ticket-service
+
+  - name: service-chart
+    version: 1.0.0
+    alias: flight-service
+
+  - name: service-chart
+    version: 1.0.0
+    alias: bonus-service
+
+  - name: service-chart
+    version: 1.0.0
+    alias: gateway-service
