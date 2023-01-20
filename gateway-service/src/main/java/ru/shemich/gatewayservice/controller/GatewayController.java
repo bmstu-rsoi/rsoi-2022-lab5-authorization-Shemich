@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -44,6 +45,8 @@ public class GatewayController {
         clientBonus = WebClient.create(bonusServiceUrl);
     }
 
+
+
     @GetMapping("/flights")
     public Mono<PaginationResponse> getFlights(
             @RequestParam(defaultValue = "0") int page,
@@ -62,34 +65,34 @@ public class GatewayController {
     }
 
     @GetMapping("/privilege")
-    public Mono<PrivilegeInfoResponse> getPrivilegeShortInfo (@RequestHeader(headerUsername) String username) {
+    public Mono<PrivilegeInfoResponse> getPrivilegeShortInfo (Authentication authentication) {
         return clientBonus
                 .get()
                 .uri("/privilege")
-                .header(headerUsername, username)
+                .header(headerUsername, authentication.getName())
                 .retrieve()
                 .bodyToMono(PrivilegeInfoResponse.class);
     }
 
     @GetMapping("/me")
-    public UserInfoResponse getUserInfo(@RequestHeader(headerUsername) String username) {
-        Flux<TicketResponse> ticketResponseFlux = gatewayService.getTicketResponseList(clientTicket, username);
+    public UserInfoResponse getUserInfo(Authentication authentication) {
+        Flux<TicketResponse> ticketResponseFlux = gatewayService.getTicketResponseList(clientTicket,authentication.getName());
         List<TicketResponse> ticketResponseList = ticketResponseFlux.collect(Collectors.toList()).share().block();
-        PrivilegeShortInfo privilegeShortInfo = gatewayService.getPrivilegeShortInfo(clientBonus, username);
+        PrivilegeShortInfo privilegeShortInfo = gatewayService.getPrivilegeShortInfo(clientBonus,authentication.getName());
         gatewayService.updateTicketResponseList(clientFlight, ticketResponseList);
         return new UserInfoResponse(ticketResponseList, privilegeShortInfo);
     }
 
     @GetMapping("/tickets/{ticketUid}")
     public TicketResponse getTicketByUidAndUsername(@PathVariable UUID ticketUid,
-                                                    @RequestHeader(headerUsername) String username) {
-        log.info("GATEWAY: Fetching ticket. UUID: {}, Username: {}", ticketUid, username);
+                                                    Authentication authentication) {
+        log.info("GATEWAY: Fetching ticket. UUID: {}, Username: {}", ticketUid,authentication.getName());
         TicketResponse ticketResponse = clientTicket
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/tickets" + "/" + ticketUid)
                         .build())
-                .header(headerUsername, username)
+                .header(headerUsername,authentication.getName())
                 .retrieve()
                 .bodyToMono(TicketResponse.class)
                 .block();
@@ -105,26 +108,26 @@ public class GatewayController {
     }
     @DeleteMapping("/tickets/{ticketUid}")
     public ResponseEntity<?> refundTicketByUidAndUsername(@PathVariable UUID ticketUid,
-                                                       @RequestHeader(headerUsername) String username) {
-        log.info("GATEWAY: Refunding ticket. UUID: {}, Username: {}", ticketUid, username);
+                                                          Authentication authentication) {
+        log.info("GATEWAY: Refunding ticket. UUID: {}, Username: {}", ticketUid,authentication.getName());
 
-        HttpStatus ticketRefundHttpStatus = gatewayService.refundTicket(clientTicket, ticketUid, username);  //  fix cringe
-        HttpStatus bonusesRefundHttpStatus = gatewayService.refundBonuses(clientBonus, ticketUid, username);
+        HttpStatus ticketRefundHttpStatus = gatewayService.refundTicket(clientTicket, ticketUid,authentication.getName());  //  fix cringe
+        HttpStatus bonusesRefundHttpStatus = gatewayService.refundBonuses(clientBonus, ticketUid,authentication.getName());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 
     @GetMapping("/tickets")
-    public List<TicketResponse> getAllTickets(@RequestHeader(headerUsername) String username) {
-        log.info("GATEWAY: Fetching all tickets. Username: {}", username);
-        Flux<TicketResponse> ticketResponseFlux = gatewayService.getTicketResponseList(clientTicket, username);
+    public List<TicketResponse> getAllTickets(Authentication authentication) {
+        log.info("GATEWAY: Fetching all tickets. Username: {}",authentication.getName());
+        Flux<TicketResponse> ticketResponseFlux = gatewayService.getTicketResponseList(clientTicket,authentication.getName());
         List<TicketResponse> ticketResponseList = ticketResponseFlux.collect(Collectors.toList()).share().block();
         return gatewayService.updateTicketResponseList(clientFlight, ticketResponseList);
     }
 
     @PostMapping("/tickets")
-    public TicketPurchaseResponse purchase(@RequestHeader(headerUsername) String username,
+    public TicketPurchaseResponse purchase(Authentication authentication,
                                            @RequestBody TicketPurchaseRequest request) {
         log.info("GATEWAY: Start purchase");
         String flightNumber = request.getFlightNumber();
@@ -135,10 +138,10 @@ public class GatewayController {
         if (isExist.equals("true")) {
             log.info("GATEWAY: Flight number: {} exist", flightNumber);
             FlightResponse flightResponse = gatewayService.getFlightByNumber(clientFlight, flightNumber);
-            TicketPurchaseResponse ticketPurchaseResponse = gatewayService.getTicketPurchaseResponse(clientTicket, username, request);
-            String updatePrivilege = gatewayService.updatePrivilege(clientBonus, username, request, ticketPurchaseResponse.getTicketUid());  //  wtf
+            TicketPurchaseResponse ticketPurchaseResponse = gatewayService.getTicketPurchaseResponse(clientTicket,authentication.getName(), request);
+            String updatePrivilege = gatewayService.updatePrivilege(clientBonus,authentication.getName(), request, ticketPurchaseResponse.getTicketUid());  //  wtf
             log.info("GATEWAY: Ticket purchased");
-            return gatewayService.updateTicketPurchaseResponse(clientBonus, username, ticketPurchaseResponse, flightResponse, request);
+            return gatewayService.updateTicketPurchaseResponse(clientBonus,authentication.getName(), ticketPurchaseResponse, flightResponse, request);
         } else {
             return null;
         }
