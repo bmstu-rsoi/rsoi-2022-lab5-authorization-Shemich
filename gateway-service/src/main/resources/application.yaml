@@ -1,0 +1,13 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://dev-37357578.okta.com/oauth2/default/v1/keys
+
+okta:
+  oauth2:
+    client-id: 0oa81ay17t2QyKpXD5d7
+    issuer: https://dev-37357578.okta.com/oauth2/default
+    client-secret: ELJ02aATweBKXncJU9K4bX7qdlAReRBnPLSv_UDY
+    redirect-uri: https://gateway-shemich.cloud.okteto.net/api/v1/callback
