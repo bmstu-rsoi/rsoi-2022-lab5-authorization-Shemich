@@ -1,0 +1,122 @@
+name: rsoi-2022-lab5-authorization-Shemich
+
+# The build section defines how to build the images of your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#build
+build:
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_BONUS_REGISTRY: image registry
+  #  - OKTETO_BUILD_BONUS_REPOSITORY: image repo
+  #  - OKTETO_BUILD_BONUS_IMAGE: image name
+  #  - OKTETO_BUILD_BONUS_SHA: image tag sha256
+  bonus:
+    context: bonus-service
+    dockerfile: Dockerfile
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_FLIGHT_REGISTRY: image registry
+  #  - OKTETO_BUILD_FLIGHT_REPOSITORY: image repo
+  #  - OKTETO_BUILD_FLIGHT_IMAGE: image name
+  #  - OKTETO_BUILD_FLIGHT_SHA: image tag sha256
+  flight:
+    context: flight-service
+    dockerfile: Dockerfile
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_GATEWAY_REGISTRY: image registry
+  #  - OKTETO_BUILD_GATEWAY_REPOSITORY: image repo
+  #  - OKTETO_BUILD_GATEWAY_IMAGE: image name
+  #  - OKTETO_BUILD_GATEWAY_SHA: image tag sha256
+  gateway:
+    context: gateway-service
+    dockerfile: Dockerfile
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_POSTGRES_REGISTRY: image registry
+  #  - OKTETO_BUILD_POSTGRES_REPOSITORY: image repo
+  #  - OKTETO_BUILD_POSTGRES_IMAGE: image name
+  #  - OKTETO_BUILD_POSTGRES_SHA: image tag sha256
+  postgres: ""
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_TICKET_REGISTRY: image registry
+  #  - OKTETO_BUILD_TICKET_REPOSITORY: image repo
+  #  - OKTETO_BUILD_TICKET_IMAGE: image name
+  #  - OKTETO_BUILD_TICKET_SHA: image tag sha256
+  ticket:
+    context: ticket-service
+    dockerfile: Dockerfile
+
+# The deploy section defines how to deploy your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#deploy
+deploy:
+  compose:
+    file: docker-compose.yml
+    services:
+      - gateway
+      - postgres
+      - ticket
+      - flight
+      - bonus
+
+# The dependencies section defines other git repositories to be deployed as part of your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#dependencies
+# dependencies:
+#   - https://github.com/okteto/sample
+
+
+# The dev section defines how to activate a development container
+# More info: https://www.okteto.com/docs/reference/manifest/#dev
+dev:
+  bonus:
+    image: okteto/maven:3
+    command: bash
+    workdir: /app
+    sync:
+      - .:/app
+    forward:
+      - 5005:5005
+    volumes:
+      - /root/.m2
+  flight:
+    image: okteto/maven:3
+    command: bash
+    workdir: /app
+    sync:
+      - .:/app
+    forward:
+      - 5005:5005
+    volumes:
+      - /root/.m2
+  gateway:
+    image: okteto/maven:3
+    command: bash
+    workdir: /app
+    sync:
+      - .:/app
+    forward:
+      - 5005:5005
+    volumes:
+      - /root/.m2
+  postgres:
+    image: library/postgres:13
+    command: sh
+    sync:
+      - postgres:/docker-entrypoint-initdb.d/
+    forward:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+  ticket:
+    image: okteto/maven:3
+    command: bash
+    workdir: /app
+    sync:
+      - .:/app
+    forward:
+      - 5005:5005
+    volumes:
+      - /root/.m2
+
