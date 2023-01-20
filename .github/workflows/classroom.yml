@@ -67,6 +67,12 @@ jobs:
           docker compose down
           docker push shemich/postgres:1.0
 
+      - name: Create .kube folder
+        run: mkdir $HOME/.kube
+
+      - name: Send oktetog config to K8S
+        run: cp ./k8s/config $HOME/.kube/configg
+
       - name: Deploy to k8s
         run: |
           kubectl config set-cluster flights-service-cluster --server="${{ secrets.OKTETO_SERVER }}" --insecure-skip-tls-verify=true
@@ -77,12 +83,6 @@ jobs:
           cd k8s && helm upgrade --install --force --debug services services-chart/
           sleep 45
           kubectl get pods
-
-      - name: Create .kube folder
-        run: mkdir $HOME/.kube
-
-      - name: Send oktetog config to K8S
-        run: cp ./k8s/config $HOME/.kube/config
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
